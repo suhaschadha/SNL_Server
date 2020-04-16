@@ -37,21 +37,33 @@ app.get("/markers", (req,res) => {
     })
 })
 
-app.get("/thermalGraph/:name", (req,res) => {
-    let data= [];
-    let db = mongojs(dbPath, ['ThermalGraph']);
+//app.get("/thermalGraph/:name", (req,res) => {
+//    let data= [];
+//    let db = mongojs(dbPath, ['ThermalGraph']);
     /*var docs = db.ThermalGraph.find(function (err, docs) {
             console.log(docs);
             db.close();
             res.status(200).send(docs);
     }) */
 
-    db.ThermalGraph.find({"Chemical Name": req.params.name}).forEach(function (err, doc) {
-    if (!doc) {
-        res.status(200).send(data);
-    }
-    data.push(doc);
-})
+//    db.ThermalGraph.find({"Chemical Name": req.params.name}).forEach(function (err, doc) {
+//    if (!doc) {
+//        res.status(200).send(data);
+//    }
+//    data.push(doc);
+//})
+//})
+
+app.get("/thermalGraph", (req,res) => {
+    let db = mongojs(dbPath, ['ThermalGraph']);
+    db.ThermalGraph.find(function (err, docs) {
+        if(err || !docs.length)
+            res.status(403).send(err || "No records found");
+        else{
+            db.close();
+            res.status(200).send(docs);
+        }
+    })
 })
 
 app.get("/shipmentPerformanceIndicator", (req,res) => {
